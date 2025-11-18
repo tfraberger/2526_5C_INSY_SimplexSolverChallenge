@@ -22,9 +22,8 @@ namespace LO_bibCORE
             if (anzNebenbed < 0) anzNebenbed = 0;
 
             int rows = anzNebenbed + 1;
-            int cols = anzProdukte + 1;
 
-            matrix = new double[rows, cols];
+            matrix = new double[rows, anzProdukte];
             schlupf = new double[rows, anzNebenbed];
 
             for (int i = 1; i < rows; i++)
@@ -37,18 +36,14 @@ namespace LO_bibCORE
             rs = new double[rows];
             q = new double[rows];
 
-            int totalColumns = anzProdukte + anzNebenbed + 1;
+            int totalColumns = rows;
             faktor = new double[totalColumns];
             legenden = new string[totalColumns];
 
-            for (int i = 0; i < anzProdukte; i++)
-                legenden[i] = "x" + (i + 1);
-
-            for (int i = 0; i < anzNebenbed; i++)
-                legenden[anzProdukte + i] = "s" + (i + 1);
-
-            legenden[anzProdukte + anzNebenbed] = "b";
-
+            legenden[0] = "Z";
+            for (int i = 1; i < rows; i++)
+                legenden[i] = "s" + (i + 1);
+            
             pivotSpalte = -1;
             pivotZeile = -1;
             Solved = false;
