@@ -1,6 +1,15 @@
 ﻿namespace _2526_5C_INSY_SimplexSolverChallenge;
 
 class Program {
+    public bool Solved { get; private set; }
+    private double[,] matrix;
+    private double[,] schlupf;
+    public double[] rs { get; private set; }
+    private double[] q;
+    public string[] legenden {get; private set;}
+    private int pivotSpalte;
+    private int pivotZeile;
+    
 //Gaense Beispiel
     //static Produktionsmatrix pm = new Produktionsmatrix(2, 2);
 
