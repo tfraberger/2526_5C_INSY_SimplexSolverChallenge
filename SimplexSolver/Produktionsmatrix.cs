@@ -62,7 +62,40 @@ namespace LO_bibCORE
         //Pivotzeile durchdividieren
         public void DividierePivotZeile(){}
         //alle Zeilen "faktor"-mal von anderen abziehen
-        public void SubtrahiereRestAusserPivotZeile(){}
+        public void SubtrahiereRestAusserPivotZeile()
+        {
+            if (matrix == null || pivotSpalte < 0 || pivotZeile < 0) return;
+
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            int schlCols = schlupf.GetLength(1);
+
+            for (int z = 0; z < rows; z++)
+            {
+                if (z == pivotZeile) continue;
+
+                double f = matrix[z, pivotSpalte];
+                if (faktor != null && z < faktor.Length) faktor[z] = f;
+
+                for (int sp = 0; sp < cols; sp++)
+                {
+                    matrix[z, sp] -= f * matrix[pivotZeile, sp];
+                }
+
+                if (schlupf != null)
+                {
+                    for (int s = 0; s < schlCols; s++)
+                    {
+                        schlupf[z, s] -= f * schlupf[pivotZeile, s];
+                    }
+                }
+
+                if (rs != null && pivotZeile < rs.Length && z < rs.Length)
+                {
+                    rs[z] -= f * rs[pivotZeile];
+                }
+            }
+        }
         //Ausgabe
         public override string ToString(){}
         
