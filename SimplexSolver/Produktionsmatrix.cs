@@ -15,5 +15,19 @@ namespace LO_bibCORE
 
         // Hilfsarray
         private double[] faktor;//quasi die absoluten Zellbezüge vom Excel
+
+        public Produktionsmatrix(int anzProdukte, int anzNebenbed){}
+        public void fillLine(int zeile, double[] werte){}
+        //Pivot-Spalte ermitteln
+        private int GetPivotSpalte(){}
+        //Quotienten ausrechnen
+        public void BerechneQutienten(){}
+        //Pivotzeile durchdividieren
+        public void DividierePivotZeile(){}
+        //alle Zeilen "faktor"-mal von anderen abziehen
+        public void SubtrahiereRestAusserPivotZeile(){}
+        //Ausgabe
+        public override string ToString(){}
+        
     }
 }
