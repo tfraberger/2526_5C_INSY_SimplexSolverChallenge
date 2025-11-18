@@ -22,9 +22,8 @@ namespace LO_bibCORE
             if (anzNebenbed < 0) anzNebenbed = 0;
 
             int rows = anzNebenbed + 1;
-            int cols = anzProdukte + 1;
 
-            matrix = new double[rows, cols];
+            matrix = new double[rows, anzProdukte];
             schlupf = new double[rows, anzNebenbed];
 
             for (int i = 1; i < rows; i++)
@@ -37,18 +36,14 @@ namespace LO_bibCORE
             rs = new double[rows];
             q = new double[rows];
 
-            int totalColumns = anzProdukte + anzNebenbed + 1;
+            int totalColumns = rows;
             faktor = new double[totalColumns];
             legenden = new string[totalColumns];
 
-            for (int i = 0; i < anzProdukte; i++)
-                legenden[i] = "x" + (i + 1);
-
-            for (int i = 0; i < anzNebenbed; i++)
-                legenden[anzProdukte + i] = "s" + (i + 1);
-
-            legenden[anzProdukte + anzNebenbed] = "b";
-
+            legenden[0] = "Z";
+            for (int i = 1; i < rows; i++)
+                legenden[i] = "s" + (i + 1);
+            
             pivotSpalte = -1;
             pivotZeile = -1;
             Solved = false;
@@ -97,7 +92,30 @@ namespace LO_bibCORE
         }
         }
         //Pivotzeile durchdividieren
-        public void DividierePivotZeile(){}
+        public void DividierePivotZeile() {
+            // Pivot-Element holen
+            double pivotWert = matrix[pivotZeile, pivotSpalte];
+
+            // Fehlerbehandlung, Division durch 0 vermeiden
+            if (pivotWert == 0)
+                throw new DivideByZeroException("Pivot-Wert ist 0, Division nicht möglich.");
+
+            // Pivotzeile vollständig durch den Pivot-Wert teilen
+            for (int spalte = 0; spalte < matrix.GetLength(1); spalte++) {
+                matrix[pivotZeile, spalte] /= pivotWert;
+            }
+
+            // Auch den rechten Seitenwert (rs) teilen, falls vorhanden
+            if (rs != null && rs.Length > pivotZeile)
+                rs[pivotZeile] /= pivotWert;
+
+            // Schlupfwerte ebenfalls normieren, falls verwendet
+            if (schlupf != null) {
+                for (int s = 0; s < schlupf.GetLength(1); s++) {
+                    schlupf[pivotZeile, s] /= pivotWert;
+                }
+            }
+        }
         //alle Zeilen "faktor"-mal von anderen abziehen
         public void SubtrahiereRestAusserPivotZeile(){}
         //Ausgabe
