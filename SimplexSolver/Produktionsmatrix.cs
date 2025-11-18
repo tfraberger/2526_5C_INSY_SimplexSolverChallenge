@@ -58,7 +58,44 @@ namespace LO_bibCORE
         //Pivot-Spalte ermitteln
         private int GetPivotSpalte(){}
         //Quotienten ausrechnen
-        public void BerechneQutienten(){}
+        public void BerechneQutienten()
+        {
+            // Pivot-Spalte bestimmen
+            pivotSpalte = GetPivotSpalte();
+
+            q = new double[matrix.GetLength(0)];
+            double minQ = double.PositiveInfinity;
+            pivotZeile = -1;
+
+            // Für jede Nebenbedingungs-Zeile (beginnend bei 1)
+            for (int i = 1; i < matrix.GetLength(0); i++)
+            {
+                double pivotKandidat = matrix[i, pivotSpalte];
+
+                if (pivotKandidat > 0)     // Nur positive Koeffizienten sind gültig
+                {
+                    q[i] = rs[i] / pivotKandidat;
+
+                    if (q[i] < minQ)
+                    {
+                        minQ = q[i];
+                        pivotZeile = i;
+                    }
+                }
+                else
+                {
+                    q[i] = double.PositiveInfinity;
+                }
+            }
+
+            // Fehlerbehandlung: keine gültige Pivotzeile → unbeschränkt
+            if (pivotZeile == -1)
+            {
+                Console.WriteLine("Kein gültiger Pivot gefunden — Lösung unbeschränkt!");
+                Solved = true;
+            }
+        }
+        }
         //Pivotzeile durchdividieren
         public void DividierePivotZeile(){}
         //alle Zeilen "faktor"-mal von anderen abziehen
