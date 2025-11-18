@@ -23,7 +23,30 @@ namespace LO_bibCORE
         //Quotienten ausrechnen
         public void BerechneQutienten(){}
         //Pivotzeile durchdividieren
-        public void DividierePivotZeile(){}
+        public void DividierePivotZeile() {
+            // Pivot-Element holen
+            double pivotWert = matrix[pivotZeile, pivotSpalte];
+
+            // Fehlerbehandlung, Division durch 0 vermeiden
+            if (pivotWert == 0)
+                throw new DivideByZeroException("Pivot-Wert ist 0, Division nicht möglich.");
+
+            // Pivotzeile vollständig durch den Pivot-Wert teilen
+            for (int spalte = 0; spalte < matrix.GetLength(1); spalte++) {
+                matrix[pivotZeile, spalte] /= pivotWert;
+            }
+
+            // Auch den rechten Seitenwert (rs) teilen, falls vorhanden
+            if (rs != null && rs.Length > pivotZeile)
+                rs[pivotZeile] /= pivotWert;
+
+            // Schlupfwerte ebenfalls normieren, falls verwendet
+            if (schlupf != null) {
+                for (int s = 0; s < schlupf.GetLength(1); s++) {
+                    schlupf[pivotZeile, s] /= pivotWert;
+                }
+            }
+        }
         //alle Zeilen "faktor"-mal von anderen abziehen
         public void SubtrahiereRestAusserPivotZeile(){}
         //Ausgabe
