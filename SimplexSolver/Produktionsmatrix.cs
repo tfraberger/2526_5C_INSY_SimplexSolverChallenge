@@ -15,8 +15,40 @@ namespace LO_bibCORE
 
         // Hilfsarray
         private double[] faktor;//quasi die absoluten Zellbezüge vom Excel
+        
+        public Produktionsmatrix(int anzProdukte, int anzNebenbed)
+        {
+            if (anzProdukte < 1) anzProdukte = 1;
+            if (anzNebenbed < 0) anzNebenbed = 0;
 
-        public Produktionsmatrix(int anzProdukte, int anzNebenbed){}
+            int rows = anzNebenbed + 1;
+
+            matrix = new double[rows, anzProdukte];
+            schlupf = new double[rows, anzNebenbed];
+
+            for (int i = 1; i < rows; i++)
+            {
+                int slackIndex = i - 1;
+                if (slackIndex < anzNebenbed)
+                    schlupf[i, slackIndex] = 1.0;
+            }
+
+            rs = new double[rows];
+            q = new double[rows];
+
+            int totalColumns = rows;
+            faktor = new double[totalColumns];
+            legenden = new string[totalColumns];
+
+            legenden[0] = "Z";
+            for (int i = 1; i < rows; i++)
+                legenden[i] = "s" + (i + 1);
+            
+            pivotSpalte = -1;
+            pivotZeile = -1;
+            Solved = false;
+        }
+        
         public void fillLine(int zeile, double[] werte){}
         //Pivot-Spalte ermitteln
         private int GetPivotSpalte(){}
