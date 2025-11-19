@@ -1,4 +1,6 @@
-﻿namespace _2526_5C_INSY_SimplexSolverChallenge;
+﻿using LO_bibCORE;
+
+namespace _2526_5C_INSY_SimplexSolverChallenge;
 
 class Program {
 //Gaense Beispiel
