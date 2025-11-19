@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace LO_bibCORE
 {
     public class Produktionsmatrix
@@ -122,7 +124,7 @@ namespace LO_bibCORE
                 Solved = true;
             }
         }
-        }
+        
         //Pivotzeile durchdividieren
         public void DividierePivotZeile() {
             // Pivot-Element holen
@@ -184,7 +186,49 @@ namespace LO_bibCORE
             }
         }
         //Ausgabe
-        public override string ToString(){}
+        public override string ToString() {
+            var sb = new StringBuilder();
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+            int schlupflength = schlupf.GetLength(1);
+
+            sb.AppendLine("matrix:");
+            sb.AppendLine();
+
+            for (int c = 0; c < cols + schlupflength + 1; c++)
+                sb.Append($"{legenden[c]}");
+            sb.AppendLine();
+
+            // die matri, schlupf und b spalte
+            for (int r = 0; r < rows; r++)
+            {
+                // matrix spalte
+                for (int c = 0; c < cols; c++)
+                    sb.Append($"{matrix[r, c]}");
+
+                // schlupf splaten
+                for (int c = 0; c < schlupflength; c++)
+                    sb.Append($"{schlupf[r, c]}");
+
+                // rs spalten
+                sb.Append($"{rs[r]}");
+
+                sb.AppendLine();
+            }
+
+            // q werte
+            sb.AppendLine();
+            sb.Append("q Werte: ");
+            for (int r = 0; r < q.Length; r++)
+                sb.Append($"{q[r]},  ");
+
+            sb.AppendLine();
+            sb.AppendLine($"p spalte: {pivotSpalte}");
+            sb.AppendLine($"p zeile: {pivotZeile}");
+            sb.AppendLine($"ergebnis: {Solved}");
+
+            return sb.ToString();
+        }
         
     }
 }
