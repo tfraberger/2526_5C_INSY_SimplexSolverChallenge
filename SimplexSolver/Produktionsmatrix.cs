@@ -128,6 +128,7 @@ namespace LO_bibCORE
             // Für jede Nebenbedingungs-Zeile (beginnend bei 1)
             for (int i = 1; i < matrix.GetLength(0); i++)
             {
+                Console.WriteLine(i + " - " + pivotSpalte + " - " + matrix.GetLength(0));
                 double pivotKandidat = matrix[i, pivotSpalte];
 
                 if (pivotKandidat > 0)     // Nur positive Koeffizienten sind gültig
@@ -224,37 +225,34 @@ namespace LO_bibCORE
             sb.AppendLine("matrix:");
             sb.AppendLine();
 
-            for (int c = 0; c < cols + schlupflength + 1; c++)
-                sb.Append($"{legenden[c]}");
-            sb.AppendLine();
-
             // die matri, schlupf und b spalte
             for (int r = 0; r < rows; r++)
             {
+                sb.Append($"{legenden[r]}\t");
                 // matrix spalte
                 for (int c = 0; c < cols; c++)
-                    sb.Append($"{matrix[r, c]}");
+                    sb.Append($"{matrix[r, c]}\t");
 
                 // schlupf splaten
                 for (int c = 0; c < schlupflength; c++)
-                    sb.Append($"{schlupf[r, c]}");
+                    sb.Append($"{schlupf[r, c]}\t");
 
                 // rs spalten
-                sb.Append($"{rs[r]}");
+                sb.Append($"{rs[r]}\t");
 
                 sb.AppendLine();
             }
 
             // q werte
             sb.AppendLine();
-            sb.Append("q Werte: ");
+            sb.Append("q Werte: \t");
             for (int r = 0; r < q.Length; r++)
                 sb.Append($"{q[r]},  ");
 
             sb.AppendLine();
-            sb.AppendLine($"p spalte: {pivotSpalte}");
-            sb.AppendLine($"p zeile: {pivotZeile}");
-            sb.AppendLine($"ergebnis: {Solved}");
+            sb.AppendLine($"p spalte: \t{pivotSpalte}");
+            sb.AppendLine($"p zeile: \t{pivotZeile}");
+            sb.AppendLine($"ergebnis: \t{Solved}");
 
             return sb.ToString();
         }
