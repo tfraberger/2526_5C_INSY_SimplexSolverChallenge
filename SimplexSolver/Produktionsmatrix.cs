@@ -224,7 +224,15 @@ namespace LO_bibCORE
 
             sb.AppendLine("matrix:");
             sb.AppendLine();
-
+            sb.Append("\t");
+            for (int c = 0; c < schlupflength; c++)
+                sb.Append($"P{c+1}\t");
+            for (int c = 0; c < schlupflength; c++)
+                sb.Append($"{legenden[c+1]}\t");
+            sb.Append("RS");
+            
+            sb.AppendLine();
+            
             // die matri, schlupf und b spalte
             for (int r = 0; r < rows; r++)
             {
