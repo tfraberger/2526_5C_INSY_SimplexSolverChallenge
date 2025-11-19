@@ -51,7 +51,36 @@ namespace LO_bibCORE
             Solved = false;
         }
         
-        public void fillLine(int zeile, double[] werte){}
+        public void fillLine(int zeile, double[] werte)
+        {
+            var spalten = matrix.GetLength(1);
+
+            for (var i = 0; i < spalten; i++) {
+                if (zeile == 0 && i == spalten - 5)
+                    matrix[zeile, i] = 1;
+                if (zeile == 1 && i == spalten - 4)
+                    matrix[zeile, i] = 1;
+                if (zeile == 2 && i == spalten - 3)
+                    matrix[zeile, i] = 1;
+
+                matrix[zeile, i] = 0;
+                
+                // Legende
+                if (i < 3)
+                    legenden [i] = "x" + (i + 1);
+                else if (i >= spalten - 5 && i < spalten - 2)
+                    legenden [i] = "s" + (i - (spalten - 5));
+                else if (i == spalten - 2)
+                    legenden [i] = "RS";
+                else if (i == spalten - 1)
+                    legenden [i] = "Q";
+            }
+            
+            if (werte.Length > 0) matrix[zeile, 0] = werte[0];                 // x1
+            if (werte.Length > 1) matrix[zeile, 1] = werte[1];                 // x2
+            if (werte.Length > 2 && spalten > 1) matrix[zeile, spalten - 2] = werte[2]; // RS
+        }
+        
         //Pivot-Spalte ermitteln
         private int GetPivotSpalte()
         {
