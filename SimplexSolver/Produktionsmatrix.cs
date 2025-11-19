@@ -51,7 +51,39 @@ namespace LO_bibCORE
         
         public void fillLine(int zeile, double[] werte){}
         //Pivot-Spalte ermitteln
-        private int GetPivotSpalte(){}
+        private int GetPivotSpalte()
+        {
+            int index = -1;
+            double min = 0;
+
+            int lastrow = matrix.GetLength(0) - 1;
+                
+            int colsMatrix = matrix.GetLength(1);
+            int colsSchlupf = schlupf.GetLength(1);
+
+            int totalCols = colsMatrix + colsSchlupf + 1;
+            double[] letzteZeile = new double[totalCols];
+
+            for (int i = 0; i < colsMatrix; i++)
+                letzteZeile[i] = matrix[lastrow, i];
+
+            for (int i = 0; i < colsSchlupf; i++)
+                letzteZeile[colsMatrix + i] = schlupf[lastrow, i];
+                
+            letzteZeile[colsMatrix + colsSchlupf] = rs[lastrow];
+                
+            for (int i = 0; i < letzteZeile.Length; i++)
+            {
+                if (letzteZeile[i] < min)
+                {
+                    min = letzteZeile[i];
+                    index = i;
+                }
+            }
+
+            pivotSpalte = index;
+            return index;
+        }
         //Quotienten ausrechnen
         public void BerechneQutienten()
         {
