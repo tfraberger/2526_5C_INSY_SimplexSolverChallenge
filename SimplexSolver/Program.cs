@@ -14,14 +14,16 @@ class Program {
 
     static void Main(string[] args)
     {
+        Console.WriteLine("Leeres System mit Einheitsmatrix:");
         Console.WriteLine(pm.ToString()); // Leeres System aus lauter 0 ausgeben
         Console.WriteLine("-------------------------------------------------------------------------------");
         Console.ReadKey();
         ////Bier
-        pm.fillLine(0, new double[] { 100, 90, 0 });    //Gewinnfunktion
-        pm.fillLine(1, new double[] { 5, 3, 100 });     //NB1
-        pm.fillLine(2, new double[] { 2, 2, 50 });      //NB2
+        pm.fillLine(0, new double[] { 5, 3, 100 });     // NB1
+        pm.fillLine(1, new double[] { 2, 2, 50 });      // NB2
+        pm.fillLine(2, new double[] { -100, -90, 0 });  // Gewinnfunktion
 
+        Console.WriteLine("Befülltes System:");
         Console.WriteLine(pm.ToString()); // Leeres System aus lauter 0 ausgeben
         Console.WriteLine("--------------------------------------------------------------------------------");
         
@@ -48,26 +50,35 @@ class Program {
         #endregion
         //Console.WriteLine(pm.ToString());
         //Console.WriteLine("-------------------------------------------------------------------------------");
-
-        while (!pm.Solved)
-            Iterate(false);
-
+        
+        int tableau = 1;
+        while (!pm.Solved){
+            Console.WriteLine($"-----------------[Tableau {tableau}]-----------------");
+            Iterate(true);
+            Console.WriteLine($"-----------------[Tableau ende]-----------------");
+            tableau++;
+        }
         Console.ReadKey();
     }
     static void Iterate(bool debug)
     {
         // 3 Teilschritte zur besseren Darstellung als public Methoden 
-        pm.BerechneQutienten();
+        Console.WriteLine("Berechne Qutienten:");
+        pm.BerechneQuotienten();
         if (debug) Console.WriteLine(pm.ToString());
         if (debug) Console.WriteLine("-------------------------------------------------------------------------------");
+        Console.ReadKey();
 
+        Console.WriteLine("Dividiere Pivotzeile:");
         pm.DividierePivotZeile();
         if (debug) Console.WriteLine(pm.ToString());
         if (debug) Console.WriteLine("-------------------------------------------------------------------------------");
+        Console.ReadKey();
 
+        Console.WriteLine("Subtrahiere Rest ausser Pivotzeile:");
         pm.SubtrahiereRestAusserPivotZeile();
         Console.WriteLine(pm.ToString());
         Console.WriteLine("-------------------------------------------------------------------------------");
-
+        Console.ReadKey();
     }
 }

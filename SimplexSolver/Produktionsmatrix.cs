@@ -28,9 +28,9 @@ namespace LO_bibCORE
             matrix = new double[rows, anzProdukte];
             schlupf = new double[rows, anzNebenbed];
 
-            for (int i = 1; i < rows; i++)
+            for (int i = 0; i < rows - 1; i++)
             {
-                int slackIndex = i - 1;
+                int slackIndex = i;
                 if (slackIndex < anzNebenbed)
                     schlupf[i, slackIndex] = 1.0;
             }
@@ -41,10 +41,11 @@ namespace LO_bibCORE
             int totalColumns = rows;
             faktor = new double[totalColumns];
             legenden = new string[totalColumns];
-
-            legenden[0] = "Z";
-            for (int i = 1; i < rows; i++)
+            
+            for (int i = 0; i < rows - 1; i++)
                 legenden[i] = "s" + (i + 1);
+            
+            legenden[rows - 1] = "Z";
             
             pivotSpalte = -1;
             pivotZeile = -1;
@@ -53,32 +54,16 @@ namespace LO_bibCORE
         
         public void fillLine(int zeile, double[] werte)
         {
-            var spalten = matrix.GetLength(1);
+            int cols = matrix.GetLength(1);
 
-            for (var i = 0; i < spalten; i++) {
-                if (zeile == 0 && i == spalten - 5)
-                    matrix[zeile, i] = 1;
-                if (zeile == 1 && i == spalten - 4)
-                    matrix[zeile, i] = 1;
-                if (zeile == 2 && i == spalten - 3)
-                    matrix[zeile, i] = 1;
+            for (int i = 0; i < cols; i++)
+                matrix[zeile, i] = werte.Length > i ? werte[i] : 0;
 
-                matrix[zeile, i] = 0;
-                
-                // Legende
-                if (i < 3)
-                    legenden [i] = "x" + (i + 1);
-                else if (i >= spalten - 5 && i < spalten - 2)
-                    legenden [i] = "s" + (i - (spalten - 5));
-                else if (i == spalten - 2)
-                    legenden [i] = "RS";
-                else if (i == spalten - 1)
-                    legenden [i] = "Q";
-            }
-            
-            if (werte.Length > 0) matrix[zeile, 0] = werte[0];                 // x1
-            if (werte.Length > 1) matrix[zeile, 1] = werte[1];                 // x2
-            if (werte.Length > 2 && spalten > 1) matrix[zeile, spalten - 2] = werte[2]; // RS
+            //if (zeile > 0 && zeile - 1 < schlupf.GetLength(1))
+             //   schlupf[zeile, zeile - 1] = 1;
+
+            if (werte.Length > cols)
+                rs[zeile] = werte[cols];
         }
         
         //Pivot-Spalte ermitteln
@@ -105,6 +90,7 @@ namespace LO_bibCORE
                 
             for (int i = 0; i < letzteZeile.Length; i++)
             {
+                Console.WriteLine(i + " - " + letzteZeile[i]);
                 if (letzteZeile[i] < min)
                 {
                     min = letzteZeile[i];
@@ -116,22 +102,34 @@ namespace LO_bibCORE
             return index;
         }
         //Quotienten ausrechnen
-        public void BerechneQutienten()
+        public void BerechneQuotienten()
         {
             // Pivot-Spalte bestimmen
             pivotSpalte = GetPivotSpalte();
+
+            // keine Pivotspalte → Optimale Lösung
+            if (pivotSpalte == -1)
+            {
+                Console.WriteLine("Optimale Lösung erreicht.");
+                Solved = true;
+                return;
+            }
 
             q = new double[matrix.GetLength(0)];
             double minQ = double.PositiveInfinity;
             pivotZeile = -1;
 
-            // Für jede Nebenbedingungs-Zeile (beginnend bei 1)
             for (int i = 1; i < matrix.GetLength(0); i++)
             {
-                Console.WriteLine(i + " - " + pivotSpalte + " - " + matrix.GetLength(0));
-                double pivotKandidat = matrix[i, pivotSpalte];
+                double pivotKandidat;
 
-                if (pivotKandidat > 0)     // Nur positive Koeffizienten sind gültig
+                // Pivot aus x- oder schlupf-Bereich holen
+                if (pivotSpalte < matrix.GetLength(1))
+                    pivotKandidat = matrix[i, pivotSpalte];
+                else
+                    pivotKandidat = schlupf[i, pivotSpalte - matrix.GetLength(1)];
+
+                if (pivotKandidat > 0)
                 {
                     q[i] = rs[i] / pivotKandidat;
 
@@ -147,13 +145,13 @@ namespace LO_bibCORE
                 }
             }
 
-            // Fehlerbehandlung: keine gültige Pivotzeile → unbeschränkt
             if (pivotZeile == -1)
             {
                 Console.WriteLine("Kein gültiger Pivot gefunden — Lösung unbeschränkt!");
                 Solved = true;
             }
         }
+ 
         
         //Pivotzeile durchdividieren
         public void DividierePivotZeile() {
