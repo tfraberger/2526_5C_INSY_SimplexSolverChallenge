@@ -90,7 +90,6 @@ namespace LO_bibCORE
                 
             for (int i = 0; i < letzteZeile.Length; i++)
             {
-                Console.WriteLine(i + " - " + letzteZeile[i]);
                 if (letzteZeile[i] < min)
                 {
                     min = letzteZeile[i];
@@ -110,7 +109,7 @@ namespace LO_bibCORE
             // keine Pivotspalte → Optimale Lösung
             if (pivotSpalte == -1)
             {
-                Console.WriteLine("Optimale Lösung erreicht.");
+                //Console.WriteLine("Optimale Lösung erreicht.");
                 Solved = true;
                 return;
             }
@@ -119,7 +118,7 @@ namespace LO_bibCORE
             double minQ = double.PositiveInfinity;
             pivotZeile = -1;
 
-            for (int i = 1; i < matrix.GetLength(0); i++)
+            for (int i = 0; i < matrix.GetLength(0) - 1; i++)
             {
                 double pivotKandidat;
 
@@ -220,7 +219,6 @@ namespace LO_bibCORE
             int cols = matrix.GetLength(1);
             int schlupflength = schlupf.GetLength(1);
 
-            sb.AppendLine("matrix:");
             sb.AppendLine();
             sb.Append("\t");
             for (int c = 0; c < schlupflength; c++)

@@ -53,9 +53,10 @@ class Program {
         
         int tableau = 1;
         while (!pm.Solved){
-            Console.WriteLine($"-----------------[Tableau {tableau}]-----------------");
-            Iterate(true);
-            Console.WriteLine($"-----------------[Tableau ende]-----------------");
+            Console.WriteLine();
+            Console.WriteLine($"----------------------------------[Tableau {tableau}]----------------------------------");
+            Iterate(false);
+            Console.WriteLine($"--------------------------------[Tableau ende]--------------------------------");
             tableau++;
         }
         Console.ReadKey();
@@ -63,22 +64,40 @@ class Program {
     static void Iterate(bool debug)
     {
         // 3 Teilschritte zur besseren Darstellung als public Methoden 
-        Console.WriteLine("Berechne Qutienten:");
+        if (debug) Console.WriteLine("Berechne Qutienten:");
         pm.BerechneQuotienten();
-        if (debug) Console.WriteLine(pm.ToString());
-        if (debug) Console.WriteLine("-------------------------------------------------------------------------------");
-        Console.ReadKey();
+        if (debug) {
+            Console.WriteLine(pm.ToString());
+            Console.WriteLine("-------------------------------------------------------------------------------");
+            Console.ReadKey();
+        }
 
-        Console.WriteLine("Dividiere Pivotzeile:");
+        if (pm.Solved) {
+            Console.WriteLine();
+            Console.WriteLine("Solved!");
+            Console.WriteLine("Optimale Lösung erreicht.");
+            Console.WriteLine();
+            return;
+        }
+
+        if (debug) Console.WriteLine("Dividiere Pivotzeile:");
         pm.DividierePivotZeile();
-        if (debug) Console.WriteLine(pm.ToString());
-        if (debug) Console.WriteLine("-------------------------------------------------------------------------------");
-        Console.ReadKey();
+        if (debug){ 
+            Console.WriteLine(pm.ToString());
+            Console.WriteLine("-------------------------------------------------------------------------------");
+            Console.ReadKey();
+        }
 
-        Console.WriteLine("Subtrahiere Rest ausser Pivotzeile:");
+        if (debug) Console.WriteLine("Subtrahiere Rest ausser Pivotzeile:");
         pm.SubtrahiereRestAusserPivotZeile();
-        Console.WriteLine(pm.ToString());
-        Console.WriteLine("-------------------------------------------------------------------------------");
-        Console.ReadKey();
+        if (debug) {
+            Console.WriteLine(pm.ToString());
+            Console.WriteLine("-------------------------------------------------------------------------------");
+            Console.ReadKey();
+        }
+
+        if (!debug) {
+            Console.WriteLine(pm.ToString());
+        }
     }
 }
