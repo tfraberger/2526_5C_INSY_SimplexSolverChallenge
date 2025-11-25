@@ -118,15 +118,23 @@ namespace LO_bibCORE
             double minQ = double.PositiveInfinity;
             pivotZeile = -1;
 
+            int colsMatrix = matrix.GetLength(1);
+
             for (int i = 0; i < matrix.GetLength(0) - 1; i++)
             {
                 double pivotKandidat;
 
                 // Pivot aus x- oder schlupf-Bereich holen
-                if (pivotSpalte < matrix.GetLength(1))
+                if (pivotSpalte < colsMatrix)
+                {
                     pivotKandidat = matrix[i, pivotSpalte];
+                }
                 else
-                    pivotKandidat = schlupf[i, pivotSpalte - matrix.GetLength(1)];
+                {
+                    // Pivotspalte gehört zu den Schlupfvariablen (in schlupf)
+                    int sIndex = pivotSpalte - colsMatrix;
+                    pivotKandidat = schlupf[i, sIndex];
+                }
 
                 if (pivotKandidat > 0)
                 {
